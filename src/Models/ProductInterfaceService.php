@@ -6,9 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JobMetric\Brand\Models\Brand;
 use JobMetric\Extension\Models\Plugin;
+use JobMetric\Product\Enums\ProductTypeEnum;
 use JobMetric\Taxonomy\Models\Taxonomy;
 use JobMetric\Translation\Contracts\TranslationContract;
 use JobMetric\Translation\HasTranslation;
@@ -33,6 +36,11 @@ use JobMetric\Translation\HasTranslation;
  * @property-read Plugin $plugin
  * @property-read Taxonomy $taxonomy
  * @property-read Brand $brand
+ * @property-read Product $simpleProduct
+ * @property-read Product[] $products
+ * @property-read int|null $products_count
+ * @property-read Product[] $withoutSimpleProducts
+ * @property-read int|null $without_simple_products_count
  * @property-read mixed $translations
  *
  * @method ProductInterfaceService find(int $int)
@@ -134,4 +142,34 @@ class ProductInterfaceService extends Model implements TranslationContract
     {
         return $this->belongsTo(Unit::class, 'tax_class_id')->where();
     }*/
+
+    /**
+     * simpleProduct relation
+     *
+     * @return HasOne
+     */
+    public function simpleProduct(): HasOne
+    {
+        return $this->morphOne(Product::class, 'product_interfaceable')->where('type', ProductTypeEnum::SIMPLE());
+    }
+
+    /**
+     * products relation
+     *
+     * @return HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->morphMany(Product::class, 'product_interfaceable');
+    }
+
+    /**
+     * withoutSimpleProducts relation
+     *
+     * @return HasMany
+     */
+    public function withoutSimpleProducts(): HasMany
+    {
+        return $this->morphMany(Product::class, 'product_interfaceable')->where('type', '!=', ProductTypeEnum::SIMPLE());
+    }
 }

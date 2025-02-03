@@ -6,8 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JobMetric\Brand\Models\Brand;
+use JobMetric\Product\Enums\ProductTypeEnum;
 use JobMetric\Taxonomy\Models\Taxonomy;
 use JobMetric\Translation\Contracts\TranslationContract;
 use JobMetric\Translation\HasTranslation;
@@ -45,6 +48,11 @@ use JobMetric\Unit\Models\Unit;
  * @property-read Brand $brand
  * @property-read Unit $weightUnit
  * @property-read Unit $lengthUnit
+ * @property-read Product $simpleProduct
+ * @property-read Product[] $products
+ * @property-read int|null $products_count
+ * @property-read Product[] $withoutSimpleProducts
+ * @property-read int|null $without_simple_products_count
  * @property-read mixed $translations
  *
  * @method ProductInterfacePhysical find(int $int)
@@ -175,5 +183,35 @@ class ProductInterfacePhysical extends Model implements TranslationContract
     public function lengthUnit(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'length_unit_id')->where('type', UnitTypeEnum::LENGTH());
+    }
+
+    /**
+     * simpleProduct relation
+     *
+     * @return HasOne
+     */
+    public function simpleProduct(): HasOne
+    {
+        return $this->morphOne(Product::class, 'product_interfaceable')->where('type', ProductTypeEnum::SIMPLE());
+    }
+
+    /**
+     * products relation
+     *
+     * @return HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->morphMany(Product::class, 'product_interfaceable');
+    }
+
+    /**
+     * withoutSimpleProducts relation
+     *
+     * @return HasMany
+     */
+    public function withoutSimpleProducts(): HasMany
+    {
+        return $this->morphMany(Product::class, 'product_interfaceable')->where('type', '!=', ProductTypeEnum::SIMPLE());
     }
 }
