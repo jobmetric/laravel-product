@@ -7,7 +7,7 @@ use JobMetric\PackageCore\Enums\EnumToArray;
 /**
  * @method static SIMPLE()
  * @method static MAKE()
- * @method static VARIANT()
+ * @method static ATTRIBUTE()
  */
 enum ProductTypeEnum: string
 {
@@ -15,5 +15,5 @@ enum ProductTypeEnum: string
 
     case SIMPLE = "simple";
     case MAKE = "make";
-    case VARIANT = "variant";
+    case ATTRIBUTE = "attribute";
 }
