@@ -26,7 +26,9 @@ return new class extends Migration {
 
             $table->decimal('amount', 15, 3)->default(0)->index();
 
-            $table->dateTime('created_at')->nullable();
+            $table->foreignId('currency_id')->index()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->cascadeOnDelete();
+
+            $table->timestamps();
         });
     }
 
