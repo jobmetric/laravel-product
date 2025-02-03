@@ -31,6 +31,11 @@ return [
         'product_interface_digital' => 'product_interface_digitals',
         'product_interface_asset' => 'product_interface_assets',
         'product' => 'products',
+        'product_make' => 'product_makes',
+        'product_attribute' => 'product_attributes',
+        'complimentary' => 'complimentaries',
+        'product_pricing' => 'product_pricings',
+        'product_plan' => 'product_plans',
     ],
 
 ];
