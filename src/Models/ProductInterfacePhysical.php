@@ -112,7 +112,7 @@ class ProductInterfacePhysical extends Model implements TranslationContract
 
     public function getTable()
     {
-        return config('product.tables.product', parent::getTable());
+        return config('product.tables.product_interface_physical', parent::getTable());
     }
 
     public function translationAllowFields(): array
