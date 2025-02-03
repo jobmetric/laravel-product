@@ -8,72 +8,50 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JobMetric\Brand\Models\Brand;
+use JobMetric\Extension\Models\Plugin;
 use JobMetric\Taxonomy\Models\Taxonomy;
 use JobMetric\Translation\Contracts\TranslationContract;
 use JobMetric\Translation\HasTranslation;
-use JobMetric\Unit\Enums\UnitTypeEnum;
-use JobMetric\Unit\Models\Unit;
 
 /**
- * JobMetric\Product\Models\ProductInterfacePhysical
+ * JobMetric\Product\Models\ProductInterfaceService
  *
  * @property int $id
- * @property string $model
+ * @property int $plugin_id
  * @property int $taxonomy_id
  * @property int $brand_id
  * @property int $tax_class_id
  * @property bool $has_tax
- * @property bool $has_fmcg
- * @property bool $subtract
- * @property float $weight
- * @property int $weight_unit_id
- * @property float $length
- * @property float $width
- * @property float $height
- * @property int $length_unit_id
  * @property int $hits
  * @property bool $status
- * @property bool $stock_status
- * @property bool $need_stock_confirm
  * @property float $max_discount
  * @property string $password
  * @property Carbon $published_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
+ * @property-read Plugin $plugin
  * @property-read Taxonomy $taxonomy
  * @property-read Brand $brand
- * @property-read Unit $weightUnit
- * @property-read Unit $lengthUnit
  * @property-read mixed $translations
  *
- * @method ProductInterfacePhysical find(int $int)
- * @method ProductInterfacePhysical findOrFail(int $int)
+ * @method ProductInterfaceService find(int $int)
+ * @method ProductInterfaceService findOrFail(int $int)
  */
-class ProductInterfacePhysical extends Model implements TranslationContract
+class ProductInterfaceService extends Model implements TranslationContract
 {
     use HasFactory,
         HasTranslation,
         SoftDeletes;
 
     protected $fillable = [
-        'model',
+        'plugin_id',
         'taxonomy_id',
         'brand_id',
         'tax_class_id',
         'has_tax',
-        'has_fmcg',
-        'subtract',
-        'weight',
-        'weight_unit_id',
-        'length',
-        'width',
-        'height',
-        'length_unit_id',
         'hits',
         'status',
-        'stock_status',
-        'need_stock_confirm',
         'max_discount',
         'password',
         'published_at',
@@ -85,23 +63,13 @@ class ProductInterfacePhysical extends Model implements TranslationContract
      * @var array<string, string>
      */
     protected $casts = [
-        'model' => 'string',
+        'plugin_id' => 'integer',
         'taxonomy_id' => 'integer',
         'brand_id' => 'integer',
         'tax_class_id' => 'integer',
         'has_tax' => 'boolean',
-        'has_fmcg' => 'boolean',
-        'subtract' => 'boolean',
-        'weight' => 'decimal:3',
-        'weight_unit_id' => 'integer',
-        'length' => 'decimal:3',
-        'width' => 'decimal:3',
-        'height' => 'decimal:3',
-        'length_unit_id' => 'integer',
         'hits' => 'integer',
         'status' => 'boolean',
-        'stock_status' => 'boolean',
-        'need_stock_confirm' => 'boolean',
         'max_discount' => 'decimal:3',
         'password' => 'string',
         'published_at' => 'datetime',
@@ -112,7 +80,7 @@ class ProductInterfacePhysical extends Model implements TranslationContract
 
     public function getTable()
     {
-        return config('product.tables.product_interface_physical', parent::getTable());
+        return config('product.tables.product_interface_service', parent::getTable());
     }
 
     public function translationAllowFields(): array
@@ -125,6 +93,16 @@ class ProductInterfacePhysical extends Model implements TranslationContract
             'meta_description',
             'meta_keywords',
         ];
+    }
+
+    /**
+     * plugin relation
+     *
+     * @return BelongsTo
+     */
+    public function plugin(): BelongsTo
+    {
+        return $this->belongsTo(Plugin::class, 'plugin_id');
     }
 
     /**
@@ -156,24 +134,4 @@ class ProductInterfacePhysical extends Model implements TranslationContract
     {
         return $this->belongsTo(Unit::class, 'tax_class_id')->where();
     }*/
-
-    /**
-     * weightUnit relation
-     *
-     * @return BelongsTo
-     */
-    public function weightUnit(): BelongsTo
-    {
-        return $this->belongsTo(Unit::class, 'weight_unit_id')->where('type', UnitTypeEnum::WEIGHT());
-    }
-
-    /**
-     * lengthUnit relation
-     *
-     * @return BelongsTo
-     */
-    public function lengthUnit(): BelongsTo
-    {
-        return $this->belongsTo(Unit::class, 'length_unit_id')->where('type', UnitTypeEnum::LENGTH());
-    }
 }
