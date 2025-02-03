@@ -23,11 +23,11 @@ return new class extends Migration {
 
             // base product
             $table->foreignId('product_id')->index()->constrained(config('product.tables.products'))->cascadeOnUpdate()->cascadeOnDelete();
-            $table->decimal('product_quantity', 15, 8);
+            $table->decimal('product_quantity', 15, 3);
 
             // target complimentary
             $table->foreignId('complimentary_id')->index()->constrained(config('product.tables.products'))->cascadeOnUpdate()->cascadeOnDelete();
-            $table->decimal('complimentary_quantity', 15, 8)->default(1);
+            $table->decimal('complimentary_quantity', 15, 3)->default(1);
 
             $table->softDeletes();
             $table->timestamps();

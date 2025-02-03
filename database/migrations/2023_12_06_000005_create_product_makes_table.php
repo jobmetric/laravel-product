@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('product_id')->index()->constrained(config('product.tables.product'))->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('child_id')->index()->constrained(config('product.tables.product'))->cascadeOnUpdate()->cascadeOnDelete();
 
-            $table->decimal('quantity', 15, 8);
+            $table->decimal('quantity', 15, 3);
 
             $table->unique([
                 'product_id',

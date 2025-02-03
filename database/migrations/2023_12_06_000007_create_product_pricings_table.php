@@ -24,7 +24,7 @@ return new class extends Migration {
              * use: @extends ProductPricingTypeEnum
              */
 
-            $table->decimal('amount', 15, 8)->default(0)->index();
+            $table->decimal('amount', 15, 3)->default(0)->index();
 
             $table->dateTime('created_at')->nullable();
         });

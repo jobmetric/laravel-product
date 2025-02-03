@@ -35,7 +35,7 @@ return new class extends Migration {
              * enable or disable product interface for show in list and single.
              */
 
-            $table->decimal('max_discount', 15, 8)->default(0)->index();
+            $table->decimal('max_discount', 15, 3)->default(0)->index();
             /**
              * The max_discount field is used to determine the maximum discount that can be applied to the product.
              */

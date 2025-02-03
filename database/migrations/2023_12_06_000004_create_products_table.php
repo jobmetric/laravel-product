@@ -35,13 +35,13 @@ return new class extends Migration {
             $table->smallInteger('minimum')->default(0);
             $table->smallInteger('maximum')->default(0);
 
-            $table->decimal('warning_quantity', 15, 8)->default(0)->index();
+            $table->decimal('warning_quantity', 15, 3)->default(0)->index();
             /**
              * Out of stock alert to management
              */
 
             $table->tinyInteger('weight_sign')->default(1);
-            $table->decimal('weight', 15, 8)->nullable();
+            $table->decimal('weight', 15, 3)->nullable();
             $table->foreignId('weight_unit_id')->nullable()->constrained(config('unit.tables.unit'))->nullOnDelete()->cascadeOnUpdate();
 
             $table->boolean('is_lock_pricing_plan')->default(false);
