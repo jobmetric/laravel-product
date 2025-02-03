@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use JobMetric\Product\Enums\ProductTypeEnum;
 
@@ -16,25 +17,25 @@ return new class extends Migration {
         Schema::create(config('product.tables.product'), function (Blueprint $table) {
             $table->id();
 
-            $table->morphs('product_interfaceable');
+            $table->morphs('product_interfaceable', 'product_interfaceable_index');
             /**
              * The product_interfaceable field is used to set the product interface for the product.
              */
 
-            $table->foreignId('gallery_variation_id')->nullable()->index()->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('gallery_variation_id')->nullable()->index()->constrained(config('attribute.tables.gallery_variation'))->nullOnDelete()->cascadeOnUpdate();
 
             $table->string('type')->default(ProductTypeEnum::SIMPLE());
             /**
-             * value: simple, make, variant
+             * value: simple, make, attribute
              * use: @extends ProductTypeEnum
              */
 
-            $table->string('sku')->nullable();
+            $table->string('sku')->nullable()->index();
 
             $table->smallInteger('minimum')->default(0);
             $table->smallInteger('maximum')->default(0);
 
-            $table->decimal('warning_quantity', 15, 8)->default(0);
+            $table->decimal('warning_quantity', 15, 8)->default(0)->index();
             /**
              * Out of stock alert to management
              */
@@ -59,6 +60,9 @@ return new class extends Migration {
             /**
              * If this option is active, the product will not be displayed in the list.
              */
+
+            $table->boolean('is_ladder')->default(false)->index();
+            $table->dateTime('ladder_at')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable()->index();
 
             $table->softDeletes();
             $table->timestamps();

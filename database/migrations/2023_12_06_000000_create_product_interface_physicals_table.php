@@ -20,22 +20,22 @@ return new class extends Migration {
              * The model field is used to set the model for the product.
              */
 
-            $table->foreignId('taxonomy_id')->index()->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('taxonomy_id')->index()->constrained(config('taxonomy.tables.taxonomy'))->cascadeOnUpdate()->restrictOnDelete();
             /**
              * The taxonomy_id field is used to set the taxonomy for the product.
              */
 
             $table->foreignId('brand_id')->nullable()->index()->constrained()->restrictOnDelete();
 
-            $table->foreignId('tax_class_id')->nullable()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->restrictOnDelete();
-            $table->boolean('has_tax')->default(false);
+            $table->foreignId('tax_class_id')->nullable()->index()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->restrictOnDelete();
+            $table->boolean('has_tax')->default(false)->index();
 
-            $table->boolean('has_fmcg')->default(false);
+            $table->boolean('has_fmcg')->default(false)->index();
             /**
              * If the product is a fast-moving consumer goods, we must activate this field.
              */
 
-            $table->boolean('subtract')->default(true);
+            $table->boolean('subtract')->default(true)->index();
             /**
              * If we want to reduce the product inventory after each sale, we must activate this field.
              */
@@ -48,7 +48,7 @@ return new class extends Migration {
             $table->decimal('height', 15, 8)->nullable();
             $table->foreignId('length_unit_id')->nullable()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->restrictOnDelete();
 
-            $table->unsignedBigInteger('hits')->default(0);
+            $table->unsignedBigInteger('hits')->default(0)->index();
             /**
              * The hits field is used to determine the number of visits to the product.
              */
@@ -69,6 +69,11 @@ return new class extends Migration {
              * sale, we must activate this field, otherwise, the warehouse will not be
              * checked and the order will be registered by the customer and wait
              * for the payment link to be sent by the admin.
+             */
+
+            $table->decimal('max_discount', 15, 8)->default(0)->index();
+            /**
+             * The max_discount field is used to determine the maximum discount that can be applied to the product.
              */
 
             $table->string('password')->nullable();

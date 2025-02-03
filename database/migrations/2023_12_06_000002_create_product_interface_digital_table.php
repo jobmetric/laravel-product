@@ -15,17 +15,17 @@ return new class extends Migration {
         Schema::create(config('product.tables.product_interface_digital'), function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('taxonomy_id')->index()->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('taxonomy_id')->index()->constrained(config('taxonomy.tables.taxonomy'))->cascadeOnUpdate()->restrictOnDelete();
             /**
              * The taxonomy_id field is used to set the taxonomy for the product.
              */
 
-            $table->foreignId('brand_id')->nullable()->index()->constrained()->restrictOnDelete();
+            $table->foreignId('brand_id')->nullable()->index()->constrained(config('brand.tables.brand'))->restrictOnDelete();
 
-            $table->foreignId('tax_class_id')->nullable()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->restrictOnDelete();
-            $table->boolean('has_tax')->default(false);
+            $table->foreignId('tax_class_id')->nullable()->index()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->restrictOnDelete();
+            $table->boolean('has_tax')->default(false)->index();
 
-            $table->unsignedBigInteger('hits')->default(0);
+            $table->unsignedBigInteger('hits')->default(0)->index();
             /**
              * The hits field is used to determine the number of visits to the product.
              */
@@ -33,6 +33,11 @@ return new class extends Migration {
             $table->boolean('status')->default(true)->index();
             /**
              * enable or disable product interface for show in list and single.
+             */
+
+            $table->decimal('max_discount', 15, 8)->default(0)->index();
+            /**
+             * The max_discount field is used to determine the maximum discount that can be applied to the product.
              */
 
             $table->string('password')->nullable();
