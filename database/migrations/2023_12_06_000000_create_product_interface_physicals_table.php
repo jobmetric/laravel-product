@@ -40,12 +40,12 @@ return new class extends Migration {
              * If we want to reduce the product inventory after each sale, we must activate this field.
              */
 
-            $table->decimal('weight', 15, 8)->nullable();
+            $table->decimal('weight', 15, 3)->nullable();
             $table->foreignId('weight_unit_id')->nullable()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->restrictOnDelete();
 
-            $table->decimal('length', 15, 8)->nullable();
-            $table->decimal('width', 15, 8)->nullable();
-            $table->decimal('height', 15, 8)->nullable();
+            $table->decimal('length', 15, 3)->nullable();
+            $table->decimal('width', 15, 3)->nullable();
+            $table->decimal('height', 15, 3)->nullable();
             $table->foreignId('length_unit_id')->nullable()->constrained(config('unit.tables.unit'))->cascadeOnUpdate()->restrictOnDelete();
 
             $table->unsignedBigInteger('hits')->default(0)->index();
@@ -71,7 +71,7 @@ return new class extends Migration {
              * for the payment link to be sent by the admin.
              */
 
-            $table->decimal('max_discount', 15, 8)->default(0)->index();
+            $table->decimal('max_discount', 15, 3)->default(0)->index();
             /**
              * The max_discount field is used to determine the maximum discount that can be applied to the product.
              */
