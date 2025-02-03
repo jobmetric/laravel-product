@@ -32,8 +32,8 @@ return new class extends Migration {
 
             $table->string('sku')->nullable()->index();
 
-            $table->smallInteger('minimum')->default(0);
-            $table->smallInteger('maximum')->default(0);
+            $table->integer('minimum')->default(0);
+            $table->integer('maximum')->default(0);
 
             $table->decimal('warning_quantity', 15, 3)->default(0)->index();
             /**
@@ -49,7 +49,7 @@ return new class extends Migration {
              * If this option is active, pricing plan calculations are not used and this product is priced directly
              */
 
-            $table->foreignId('unit_type')->nullable()->index()->constrained(config('unit.tables.unit'))->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('unit_type_id')->nullable()->index()->constrained(config('unit.tables.unit'))->nullOnDelete()->cascadeOnUpdate();
 
             $table->boolean('status')->default(true)->index();
             /**
