@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use JobMetric\Product\Events\PlanableResourceEvent;
 use JobMetric\Unit\Models\Unit;
 
 /**
@@ -24,8 +25,10 @@ use JobMetric\Unit\Models\Unit;
  * @property Carbon $to_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property mixed $planable_resource
  *
  * @property-read Model $planable
+ * @property-read Unit $currency
  *
  * @method PricingPlan find(int $int)
  * @method PricingPlan findOrFail(int $int)
@@ -88,5 +91,16 @@ class PricingPlan extends Model
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'currency_id');
+    }
+
+    /**
+     * Get the planable resource attribute.
+     */
+    public function getPlanableResourceAttribute()
+    {
+        $event = new PlanableResourceEvent($this->planable);
+        event($event);
+
+        return $event->resource;
     }
 }
