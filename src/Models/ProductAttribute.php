@@ -26,6 +26,9 @@ class ProductAttribute extends Pivot
 {
     use HasFactory;
 
+    const CREATED_AT = null;
+    const UPDATED_AT = null;
+
     protected $fillable = [
         'product_id',
         'attribute_relation_id',

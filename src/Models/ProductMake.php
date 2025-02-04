@@ -23,6 +23,9 @@ class ProductMake extends Pivot
 {
     use HasFactory;
 
+    const CREATED_AT = null;
+    const UPDATED_AT = null;
+
     protected $fillable = [
         'product_id',
         'child_id',
