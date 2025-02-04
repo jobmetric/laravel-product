@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use JobMetric\Unit\Http\Resources\UnitResource;
+use JobMetric\Unit\Models\Unit;
 
 /**
  * @property int $id
@@ -20,8 +22,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Carbon $to_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property mixed $planable_resource
  *
  * @property-read Model $planable
+ * @property-read Unit $currency
  */
 class PricingPlanResource extends JsonResource
 {
@@ -45,6 +49,12 @@ class PricingPlanResource extends JsonResource
             'to_at' => Carbon::make($this->to_at)->format('Y-m-d H:i:s'),
             'created_at' => Carbon::make($this->created_at)->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::make($this->updated_at)->format('Y-m-d H:i:s'),
+
+            'planable' => $this?->planable_resource,
+
+            'currency' => $this->whenLoaded('currency', function () {
+                return new UnitResource($this->currency);
+            }),
         ];
     }
 }

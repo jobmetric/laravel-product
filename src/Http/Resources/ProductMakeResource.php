@@ -27,6 +27,14 @@ class ProductMakeResource extends JsonResource
             'product_id' => $this->product_id,
             'child_id' => $this->child_id,
             'quantity' => $this->quantity,
+
+            'product' => $this->whenLoaded('product', function () {
+                return ProductResource::make($this->product);
+            }),
+
+            'child' => $this->whenLoaded('child', function () {
+                return ProductResource::make($this->child);
+            }),
         ];
     }
 }

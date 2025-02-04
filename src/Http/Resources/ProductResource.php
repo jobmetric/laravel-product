@@ -6,7 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use JobMetric\Attribute\Http\Resources\GalleryVariationResource;
 use JobMetric\Attribute\Models\GalleryVariation;
+use JobMetric\Unit\Http\Resources\UnitResource;
 use JobMetric\Unit\Models\Unit;
 
 /**
@@ -31,6 +33,7 @@ use JobMetric\Unit\Models\Unit;
  * @property Carbon $deleted_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property mixed $product_interfaceable_resource
  *
  * @property-read Model $productInterfaceable
  * @property-read GalleryVariation $galleryVariation
@@ -68,6 +71,20 @@ class ProductResource extends JsonResource
             'deleted_at' => Carbon::make($this->deleted_at)->format('Y-m-d H:i:s'),
             'created_at' => Carbon::make($this->created_at)->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::make($this->updated_at)->format('Y-m-d H:i:s'),
+
+            'interfaceable' => $this?->product_interfaceable_resource,
+
+            'galleryVariation' => $this->whenLoaded('galleryVariation', function () {
+                return GalleryVariationResource::make($this->galleryVariation);
+            }),
+
+            'weightUnit' => $this->whenLoaded('weightUnit', function () {
+                return UnitResource::make($this->weightUnit);
+            }),
+
+            'unitType' => $this->whenLoaded('unitType', function () {
+                return UnitResource::make($this->unitType);
+            }),
         ];
     }
 }

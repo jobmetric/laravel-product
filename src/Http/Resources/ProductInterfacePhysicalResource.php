@@ -5,9 +5,12 @@ namespace JobMetric\Product\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use JobMetric\Brand\Http\Resources\BrandResource;
 use JobMetric\Brand\Models\Brand;
 use JobMetric\Product\Models\Product;
+use JobMetric\Taxonomy\Http\Resources\TaxonomyResource;
 use JobMetric\Taxonomy\Models\Taxonomy;
+use JobMetric\Unit\Http\Resources\UnitResource;
 use JobMetric\Unit\Models\Unit;
 
 /**
@@ -84,6 +87,34 @@ class ProductInterfacePhysicalResource extends JsonResource
             'updated_at' => Carbon::make($this->updated_at)->format('Y-m-d H:i:s'),
 
             'translations' => translationResourceData($this->translations, $translationLocale),
+
+            'taxonomy' => $this->whenLoaded('taxonomy', function () {
+                return TaxonomyResource::make($this->taxonomy);
+            }),
+
+            'brand' => $this->whenLoaded('brand', function () {
+                return BrandResource::make($this->brand);
+            }),
+
+            'weightUnit' => $this->whenLoaded('weightUnit', function () {
+                return UnitResource::make($this->weightUnit);
+            }),
+
+            'lengthUnit' => $this->whenLoaded('lengthUnit', function () {
+                return UnitResource::make($this->lengthUnit);
+            }),
+
+            'simpleProduct' => $this->whenLoaded('simpleProduct', function () {
+                return ProductResource::make($this->simpleProduct);
+            }),
+
+            'products' => $this->whenLoaded('products', function () {
+                return ProductResource::collection($this->products);
+            }),
+
+            'withoutSimpleProducts' => $this->whenLoaded('withoutSimpleProducts', function () {
+                return ProductResource::collection($this->withoutSimpleProducts);
+            }),
         ];
     }
 }

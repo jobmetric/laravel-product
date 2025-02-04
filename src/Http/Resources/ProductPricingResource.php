@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JobMetric\Product\Models\Product;
+use JobMetric\Unit\Http\Resources\UnitResource;
 use JobMetric\Unit\Models\Unit;
 
 /**
@@ -37,6 +38,14 @@ class ProductPricingResource extends JsonResource
             'currency_id' => $this->currency_id,
             'created_at' => Carbon::make($this->created_at)->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::make($this->updated_at)->format('Y-m-d H:i:s'),
+
+            'product' => $this->whenLoaded('product', function () {
+                return ProductResource::make($this->product);
+            }),
+
+            'currency' => $this->whenLoaded('currency', function () {
+                return UnitResource::make($this->currency);
+            }),
         ];
     }
 }

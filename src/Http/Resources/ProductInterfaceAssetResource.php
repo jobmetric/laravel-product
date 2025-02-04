@@ -5,11 +5,9 @@ namespace JobMetric\Product\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JobMetric\Brand\Models\Brand;
+use JobMetric\Extension\Http\Resources\PluginResource;
 use JobMetric\Extension\Models\Plugin;
 use JobMetric\Product\Models\Product;
-use JobMetric\Taxonomy\Models\Taxonomy;
-use JobMetric\Unit\Models\Unit;
 
 /**
  * @property int $id
@@ -58,6 +56,22 @@ class ProductInterfaceAssetResource extends JsonResource
             'updated_at' => Carbon::make($this->updated_at)->format('Y-m-d H:i:s'),
 
             'translations' => translationResourceData($this->translations, $translationLocale),
+
+            'plugin' => $this->whenLoaded('plugin', function () {
+                return PluginResource::make($this->plugin);
+            }),
+
+            'simpleProduct' => $this->whenLoaded('simpleProduct', function () {
+                return ProductResource::make($this->simpleProduct);
+            }),
+
+            'products' => $this->whenLoaded('products', function () {
+                return ProductResource::collection($this->products);
+            }),
+
+            'withoutSimpleProducts' => $this->whenLoaded('withoutSimpleProducts', function () {
+                return ProductResource::collection($this->withoutSimpleProducts);
+            }),
         ];
     }
 }

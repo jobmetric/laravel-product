@@ -38,6 +38,14 @@ class ComplimentaryResource extends JsonResource
             'deleted_at' => Carbon::make($this->deleted_at)->format('Y-m-d H:i:s'),
             'created_at' => Carbon::make($this->created_at)->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::make($this->updated_at)->format('Y-m-d H:i:s'),
+
+            'product' => $this->whenLoaded('product', function () {
+                return ProductResource::make($this->product);
+            }),
+
+            'complimentary' => $this->whenLoaded('complimentary', function () {
+                return ProductResource::make($this->complimentary);
+            }),
         ];
     }
 }
