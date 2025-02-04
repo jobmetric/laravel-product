@@ -14,7 +14,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create(config('product.tables.product_plan'), function (Blueprint $table) {
+        Schema::create(config('product.tables.pricing_plan'), function (Blueprint $table) {
             $table->id();
 
             $table->boolean('is_global')->default(false)->index();
@@ -55,6 +55,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('product.tables.product_plan'));
+        Schema::dropIfExists(config('product.tables.pricing_plan'));
     }
 };

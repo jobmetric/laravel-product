@@ -35,7 +35,7 @@ return [
         'product_attribute' => 'product_attributes',
         'complimentary' => 'complimentaries',
         'product_pricing' => 'product_pricings',
-        'product_plan' => 'product_plans',
+        'pricing_plan' => 'pricing_plans',
     ],
 
 ];
