@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JobMetric\Attribute\Models\GalleryVariation;
+use JobMetric\Product\Events\ProductInterfaceableResourceEvent;
 use JobMetric\Unit\Enums\UnitTypeEnum;
 use JobMetric\Unit\Models\Unit;
 
@@ -36,6 +37,7 @@ use JobMetric\Unit\Models\Unit;
  * @property Carbon $deleted_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property mixed $product_interfaceable_resource
  *
  * @property-read Model $productInterfaceable
  * @property-read GalleryVariation $galleryVariation
@@ -140,5 +142,16 @@ class Product extends Model
     public function unitType(): BelongsTo
     {
         return $this->belongsTo(Unit::class)->where('type', UnitTypeEnum::NUMBER());
+    }
+
+    /**
+     * Get the product interfaceable resource attribute.
+     */
+    public function getProductInterfaceableResourceAttribute()
+    {
+        $event = new ProductInterfaceableResourceEvent($this->productInterfaceable);
+        event($event);
+
+        return $event->resource;
     }
 }
