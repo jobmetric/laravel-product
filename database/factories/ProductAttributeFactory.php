@@ -3,14 +3,14 @@
 namespace JobMetric\Product\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use JobMetric\Product\Models\ProductMake;
+use JobMetric\Product\Models\ProductAttribute;
 
 /**
- * @extends Factory<ProductMake>
+ * @extends Factory<ProductAttribute>
  */
-class ProductMakeFactory extends Factory
+class ProductAttributeFactory extends Factory
 {
-    protected $model = ProductMake::class;
+    protected $model = ProductAttribute::class;
 
     /**
      * Define the model's default state.
@@ -21,8 +21,8 @@ class ProductMakeFactory extends Factory
     {
         return [
             'product_id' => null,
-            'child_id' => null,
-            'quantity' => $this->faker->randomNumber(),
+            'attribute_relation_id' => null,
+            'attribute_value_id' => null,
         ];
     }
 
@@ -41,30 +41,30 @@ class ProductMakeFactory extends Factory
     }
 
     /**
-     * set child_id
+     * set attribute_relation_id
      *
-     * @param int $child_id
+     * @param int $attribute_relation_id
      *
      * @return static
      */
-    public function setChildId(int $child_id): static
+    public function setAttributeRelationId(int $attribute_relation_id): static
     {
         return $this->state(fn(array $attributes) => [
-            'child_id' => $child_id,
+            'attribute_relation_id' => $attribute_relation_id,
         ]);
     }
 
     /**
-     * set quantity
+     * set attribute_value_id
      *
-     * @param float $quantity
+     * @param int $attribute_value_id
      *
      * @return static
      */
-    public function setQuantity(float $quantity): static
+    public function setAttributeValueId(int $attribute_value_id): static
     {
         return $this->state(fn(array $attributes) => [
-            'quantity' => $quantity,
+            'attribute_value_id' => $attribute_value_id,
         ]);
     }
 }
