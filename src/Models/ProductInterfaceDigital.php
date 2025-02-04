@@ -30,6 +30,7 @@ use JobMetric\Unit\Models\Unit;
  * @property float $max_discount
  * @property string $password
  * @property Carbon $published_at
+ * @property Carbon $deleted_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
